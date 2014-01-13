@@ -1,0 +1,20 @@
+﻿@{
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = ViewContext.RouteData.Values["action"].ToString();
+    string path = string.Format("~/bundles/{2}/{0}/{1}", controller, action, Model);
+    if (BundleTable.Bundles.Any(b => b.Path.ToLower() == path.ToLower()))
+    {
+        if(Model == "css") 
+        { 
+            @Styles.Render(path); 
+        }
+        else if (Model == "js") 
+        {   
+            @Scripts.Render(path); 
+    <script type="text/javascript">
+        var baseUrl = "@Url.Content("~")";
+    </script>
+        }
+    }
+}
+

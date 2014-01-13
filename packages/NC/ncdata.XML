@@ -1,0 +1,802 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ncdata</name>
+    </assembly>
+    <members>
+        <member name="T:NeatCode.Library.Data.Transaction">
+            <summary>
+            Control database transaction
+            </summary>
+            <example>
+            using (DbTransactionScope transaction = new DbTransactionScope())
+            {
+                Dal1 da = new Dal1(transaction);
+                da.DbAction();
+                da.DbAction2();
+                ...
+                
+                //If there is more than 1 data access object
+                Dal2 da2 = new Dal2(transaction)
+                da.DbAction();
+                da.DbAction2();
+                ...
+                
+                instance.Complete();
+            }
+            </example>
+        </member>
+        <member name="M:NeatCode.Library.Data.Transaction.#ctor">
+            <summary>
+            Initial DbHelper. It retieves the first Connection setting in config file. 
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.Transaction.#ctor(System.String)">
+            <summary>
+            Initial DbHelper according to the connection string inputted.
+            </summary>
+            <param name="connectionString">connection string</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.Transaction.#ctor(System.String,NeatCode.Library.Data.ProviderType)">
+            <summary>
+            Initial DbHelper according to the connection string inputted.
+            </summary>
+            <param name="connectionString">connection string</param>
+            <param name="providerType">Provider type</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.Transaction.Complete">
+            <summary>
+            Transaction complete.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.Transaction.Rollback">
+            <summary>
+            Transaction roll back.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.Transaction.Dispose">
+            <summary>
+            Dispose current object
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.Transaction.DbTransaction">
+            <summary>
+            Db transaction that the transaction runs
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.Transaction.ConnectionString">
+            <summary>
+            Connection string
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.Transaction.ProviderType">
+            <summary>
+            Provider type
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.Data.ProviderType">
+            <summary>
+            Provider type. Each type must have a implementation class. 
+            The name of implementation class must be Provider type's + Helper.
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Data.ProviderType.Odbc">
+            <summary>
+            ODBC database
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Data.ProviderType.OleDb">
+            <summary>
+            Ole database
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Data.ProviderType.Sql">
+            <summary>
+            Sql database
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Data.ProviderType.SqlCe">
+            <summary>
+            Sql server compact edition database
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.Data.DbFactory.DbHandlerHelper">
+            <summary>
+            Define methods for DbHelper.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandlerHelper.GetDefaultConnectionString">
+            <summary>
+            Get connection string from config file
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandlerHelper.GetProviderType(System.String)">
+             <summary>
+             Get provider type from connection string
+             </summary>
+             <param name="connectionString">
+             OleDb:
+             Provider=Microsoft.Jet.OLEDB.4.0;Data Source=filename.mdb;
+             Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Password=;Data Source=filename.mdb;
+             Provider=SQLOLEDB;Data Source=MySQLServer;Integrated Security=SSPI;
+             Provider=MSDAORA; Data Source=ORACLE8i7;Persist Security Info=False;Integrated Security=yes;
+            
+             SqlDb:
+             Server = localhost; database = dbname; Integrated Security = SSPI;
+             Data Source = localhost; Initial Catalog = dbname; Integrated Security = SSPI;
+             Data Source = localhost; Initial Catalog = dbname; User ID = username; Password = password;
+            
+             ODBC:
+             Driver={SQL Server};Server=MyServer;Trusted_Connection=yes;Database=Northwind;
+             Driver={Microsoft ODBC for Oracle};Server=ORACLE8i7;
+             Persist Security Info=False;Trusted_Connection=yes;
+             Driver={Microsoft Access Driver (*.mdb)};DBQ=c:\bin\nwind.mdb
+             Driver={Microsoft Excel Driver (*.xls)};DBQ=c:\bin\book1.xls
+             Driver={Microsoft Text Driver (*.txt; *.csv)};DBQ=c:\bin
+             DSN=dsnname
+             </param>
+             <returns>ProviderType enumeric</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandlerHelper.GetDbHandlerType(NeatCode.Library.Data.ProviderType)">
+            <summary>
+            Get DbHandler Type
+            </summary>
+            <param name="providerType">Provider type</param>
+            <returns>DbHandler type</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandlerHelper.CreateParameter(NeatCode.Library.Data.ProviderType,System.String,System.Object)">
+            <summary>
+            Add DbParameter to collection
+            </summary>
+            <param name="parameters">DbParameter collection</param>
+            <param name="providerType">Provider type</param>
+            <param name="name">parameter name</param>
+            <param name="value">parameter value</param>
+            <returns>DbParameter added to the collection</returns>
+        </member>
+        <member name="T:NeatCode.Library.Data.DbFactory.DbHandler">
+            <summary>
+            Handler to access database
+            </summary>
+            <example>
+            1. CreateHandler
+            2. OpenConn;
+            3. (MakeInParam/MakeOutParam); CreateCommand;
+            4. GetDataTable/GetReader/GetScale/RunProc;
+            5. CloseConn.
+            </example>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.Create(System.String,NeatCode.Library.Data.ProviderType)">
+            <summary>
+            Initialize database connection
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.Create(System.Data.Common.DbConnection)">
+            <summary>
+            Initialize database connection
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.SetDbCommandValue(System.Data.Common.DbCommand,System.Nullable{System.Data.CommandType},System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            Set db command value
+            </summary>
+            <param name="command">DbCommand object</param>
+            <param name="commandType">Command type</param>
+            <param name="commandText">Command text</param>
+            <param name="paras">Command parameters</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.AddInParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.Int32,System.Object)">
+            <summary>
+            Add input parameters
+            </summary>
+            <param name="command">DbCommand object</param>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter type</param>
+            <param name="size">parameter size</param>
+            <param name="value">parameter value</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.AddOutParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.Int32)">
+            <summary>
+            Add out parameters
+            </summary>
+            <param name="command">DbCommand object</param>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter type</param>
+            <param name="size">parameter size</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.AddParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.Data.ParameterDirection,System.Int32,System.Object)">
+            <summary>
+            Add parameters
+            </summary>
+            <param name="command">DbCommand object</param>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter type</param>
+            <param name="direction">parameter direction</param>
+            <param name="size">parameter size</param>
+            <param name="value">parameter name</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.BeginTransaction">
+            <summary>
+            Begin transaction
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Begin transaction
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CloseConn">
+            <summary>
+            close connection
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.Commit">
+            <summary>
+            Commit transaction.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateCommand(System.String)">
+            <summary>
+            Compose DBCommand object
+            </summary>
+            <param name="commandText">Command text. It is store procedure name for SQL server and command text for other provider.</param>
+            <returns>DBCommand</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateCommand(System.Data.CommandType,System.String)">
+            <summary>
+            Compose DBCommand object.
+            </summary>
+            <param name="commandType">Command type</param>
+            <param name="commandText">Command text. It could be SQL clause or store procedure name</param>
+            <returns>DBCommand</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateCommand(System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            Compose DBCommand object.
+            </summary>
+            <param name="commandText">Store procedure name</param>
+            <param name="paras">Store procedure parameters</param>
+            <returns>DBCommand</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateCommand(System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            Compose DBCommand object.
+            </summary>
+            <param name="commandType">Command type</param>
+            <param name="commandText">Command text. It could be SQL clause or store procedure name</param>
+            <param name="paras">Parameters</param>
+            <returns>DBCommand</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateInParameter(System.String,System.Nullable{System.Data.DbType},System.Nullable{System.Int32},System.Object)">
+            <summary>
+            Create input parameters
+            </summary>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter type</param>
+            <param name="size">parameter size</param>
+            <param name="value">parameter value</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateOutParameter(System.String,System.Nullable{System.Data.DbType},System.Nullable{System.Int32})">
+            <summary>
+            Create out parameters
+            </summary>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter type</param>
+            <param name="size">parameter size</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateParameter(System.String,System.Nullable{System.Data.DbType},System.Nullable{System.Data.ParameterDirection},System.Nullable{System.Int32},System.Object)">
+            <summary>
+            Create parameters
+            </summary>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter type</param>
+            <param name="direction">parameter direction</param>
+            <param name="size">parameter size</param>
+            <param name="value">parameter name</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.GetDataSet(System.Data.Common.DbCommand)">
+            <summary>
+            Run command to get information from database
+            </summary>
+            <param name="command">DbCommand object</param>
+            <returns>If access successfully, return DataSet object, otherwise return null</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.GetDataTable(System.Data.Common.DbCommand)">
+            <summary>
+            Run command to get information from database
+            </summary>
+            <param name="command">DbCommand object</param>
+            <returns>If access successfully, return DataTable object, otherwise return null</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.GetReader(System.Data.Common.DbCommand)">
+            <summary>
+            Run command to get information from database
+            </summary>
+            <param name="command">DbCommand object</param>
+            <returns>If access successfully, return OleDbDataReader, otherwise return null. Close automatically after executed</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.GetReader(System.Data.Common.DbCommand,System.Data.CommandBehavior)">
+            <summary>
+            Run command to get information from database
+            </summary>
+            <param name="command">DbCommand object</param>
+            <param name="behavior">command behavior</param>
+            <returns>If access successfully, return OleDbDataReader, otherwise return null. Close automatically after executed</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.GetScalar(System.Data.Common.DbCommand)">
+            <summary>
+            Run command to get information from database
+            </summary>
+            <param name="command">DbCommand object</param>
+            <returns>If access successuflly, return the value of the first column in the first row</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.OpenConn">
+            <summary>
+            Open connection with transaction isolation level.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.Rollback">
+            <summary>
+            Rollback transaction
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.RunProc(System.Data.Common.DbCommand)">
+            <summary>
+            Run command to modify database
+            </summary>
+            <param name="command">DbCommand object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateCommand">
+            <summary>
+            DbCommand with default values
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateParameter">
+            <summary>
+            DbParameter with default values
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.DbHandler.CreateDataAdapter">
+            <summary>
+            DataAdapter with default values
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NeatCode.Library.Data.DbFactory.DbHandler.Connection">
+            <summary>
+            Get DBConnection object
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.Data.DbFactory.OleDbHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.OleDbHandler.#ctor(System.String)">
+            <summary>
+            initialize dbhelper
+            </summary>
+            <param name="connectionString">connection string</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.OleDbHandler.#ctor(System.Data.Common.DbConnection)">
+            <summary>
+            initialize dbHandler
+            </summary>
+            <param name="connection">transaction scope</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.OdbcHandler.#ctor(System.String)">
+            <summary>
+            initialize dbHandler
+            </summary>
+            <param name="connectionString">connection string</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.OdbcHandler.#ctor(System.Data.Common.DbConnection)">
+            <summary>
+            initialize dbHandler
+            </summary>
+            <param name="connection">DbConnection object</param>
+        </member>
+        <member name="T:NeatCode.Library.Data.DbFactory.SqlHandler">
+            <summary>
+            Helper to access SQL server
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.SqlHandler.#ctor(System.String)">
+            <summary>
+            initialize dbhelper
+            </summary>
+            <param name="connectionString">connection string</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.SqlHandler.#ctor(System.Data.Common.DbConnection)">
+            <summary>
+            initialize dbHandler
+            </summary>
+            <param name="connection">transaction scope</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.SqlCeHandler.#ctor(System.String)">
+            <summary>
+            initialize dbhelper
+            </summary>
+            <param name="connectionString">connection string</param>
+        </member>
+        <member name="M:NeatCode.Library.Data.DbFactory.SqlCeHandler.#ctor(System.Data.Common.DbConnection)">
+            <summary>
+            initialize dbHandler
+            </summary>
+            <param name="connection">DbConnection object</param>
+        </member>
+        <member name="T:NeatCode.Library.Data.DataAccess">
+             <summary>
+             Common methods to access database
+             </summary>
+             <example>
+             1. not in transaction
+             DbAccess dbAccess = new DbAccess();
+             dbAccess.xxxx();
+             
+             2. run in transaction
+             using(DbTransactionScope scope = new DbTransactionScope())
+             {
+                 DbAccess dbAccess = new DbAccess(scope);
+                 dbAccess.xxxx();
+                 dbAccess.xxxx();
+            
+                 DbAccess dbAccess1 = new DbAccess(scope);
+                 dbAccess1.xxxx();
+                 dbAccess1.xxxx();
+             }
+             </example>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.CreateDbCommand">
+            <summary>
+            Create DbCommand
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.OpenConnection(System.Boolean)">
+            <summary>
+            create DbHelper and open connection
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.CloseConnection(System.Boolean)">
+            <summary>
+            close connection
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.AddInParameter(System.String,System.Object)">
+            <summary>
+            Add in parameter
+            </summary>
+            <param name="name">parameter name</param>
+            <param name="value">parameter value</param>
+            <returns>DbParameter object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.AddInParameter(System.String,System.Data.DbType,System.Object)">
+            <summary>
+            Add in parameter
+            </summary>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter data type</param>
+            <param name="value">parameter value</param>
+            <returns>DbParameter object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.AddInParameter(System.String,System.Data.DbType,System.Int32,System.Object)">
+             <summary>
+             Add in parameter
+             </summary>
+             <param name="name">parameter name</param>
+             <param name="dbType">parameter data type</param>
+            <param name="size">parameter size</param>
+             <param name="value">parameter value</param>
+             <returns>DbParameter object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.AddOutParameter(System.String,System.Data.DbType)">
+            <summary>
+            Add in parameter
+            </summary>
+            <param name="name">parameter name</param>
+            <param name="dbType">parameter data type</param>
+            <returns>DbParameter object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.AddOutParameter(System.String,System.Data.DbType,System.Int32)">
+             <summary>
+             Add in parameter
+             </summary>
+             <param name="name">parameter name</param>
+             <param name="dbType">parameter data type</param>
+            <param name="size">parameter size</param>
+             <returns>DbParameter object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.AddParameter(System.String,System.Data.DbType,System.Int32,System.Data.ParameterDirection,System.Object)">
+             <summary>
+             Add in parameter
+             </summary>
+             <param name="name">parameter name</param>
+             <param name="dbType">parameter data type</param>
+            <param name="size">parameter size</param>
+             <param name="value">parameter value</param>
+             <returns>DbParameter object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.CloseConnection">
+            <summary>
+            Close connection when OpenConnection() is used.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.OpenConnection">
+            <summary>
+            Open connection. 
+            Normally we don't need to call this function.In this case the connection will be opened and closed every time.
+            If this function is called, connection will keep opened until CloseConnection() function is called.
+            This will improve performance if there are bunch of actions are called.
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.Execute">
+            <summary>
+            Execute command.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <returns>Normally it returns the row affected unless the return value is changed.</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetDataSet">
+            <summary>
+            Get DataSet object.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <returns>DataSet object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetDataTable">
+            <summary>
+            Get DataTable.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <returns>DataTable object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntity``1">
+            <summary>
+            Run command to get information from database.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <typeparam name="TEntity">Return entity type</typeparam>
+            <returns>If access successfully, return entity, otherwise return null</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntityArray``1">
+            <summary>
+            Run command to get information from database.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <typeparam name="TEntity">Return entity type</typeparam>
+            <returns>If access successfully, return entity, otherwise return null</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntityCollection``2">
+            <summary>
+            Run command to get information from database.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <typeparam name="TEntity">Entity</typeparam>
+            <typeparam name="TCollection">Entity Collection</typeparam>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetReader">
+            <summary>
+            Get DataReader object.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <returns>DataReader object. It must call reader.Close() to release the resource</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetScalar">
+            <summary>
+            Get data scalar.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <returns>the value of 1st column in the 1st row</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetScalar``1">
+            <summary>
+            Get data scalar.
+            To use this function, user must set CommandText, CommandType and Parameters.
+            </summary>
+            <typeparam name="TType">Return data type</typeparam>
+            <returns>the value of 1st column in the 1st row</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.ConvertReaderToEntity``1(System.Data.Common.DbDataReader)">
+            <summary>
+            Convert the records in reader to entity array
+            </summary>
+            <typeparam name="TEntity">Entity</typeparam>
+            <param name="reader">DbReader object</param>
+            <returns>
+            if result count is not defined
+            if result count is less than 0
+            if result count larger then total count
+            then return all the records
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.ConvertReaderToEntityList``1(System.Data.Common.DbDataReader,System.Nullable{System.Int32})">
+            <summary>
+            Convert the records in reader to entity array
+            </summary>
+            <typeparam name="TEntity">Entity</typeparam>
+            <param name="reader">DbReader object</param>
+            <param name="resultCount">The number of records need to be returned</param>
+            <returns>
+            if result count is not defined
+            if result count is less than 0
+            if result count larger than total count
+            then return all the records
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.ConvertReaderToEntityList``2(System.Data.Common.DbDataReader,System.Nullable{System.Int32})">
+            <summary>
+            Convert the records in reader to entity array
+            </summary>
+            <typeparam name="TEntity">Entity</typeparam>
+            <typeparam name="TCollection">Entity collection</typeparam>
+            <param name="reader">DbReader object</param>
+            <param name="resultCount">The number of records need to be returned</param>
+            <returns>
+            if result count is not defined
+            if result count is less than 0
+            if result count larger than total count
+            then return all the records
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.ConvertCurrentReaderToEntity``1(System.Data.Common.DbDataReader)">
+            <summary>
+            Convert the records in reader to entity array
+            </summary>
+            <typeparam name="TEntity">Entity</typeparam>
+            <param name="reader">DbReader object</param>
+            <returns>
+            if result count is not defined
+            if result count is less than 0
+            if result count larger than total count
+            then return all the records
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.Add``1(``0)">
+            <summary>
+            Add new record to table.
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="entity">Entity object</param>
+            <returns>true: update successfully; false: update fail</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetIdentityValue``1">
+            <summary>
+            Get identity. If using MS access, make sure access version is 2000+
+            </summary>
+            <typeparam name="TType">could be short, int, long</typeparam>
+            <returns>last added identity</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.Update``1(``0)">
+            <summary>
+            Update record. There should be key(s) defined in TEntity.
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="entity">Entity object</param>
+            <returns>true: update successfully; false: update fail</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.Delete``1(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Delete entities by key-value pair
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="keyMaps">Key-value pair. key is the column name. value is the value of the column.</param>
+            <returns>true: update successfully; false: update fail</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.Delete``1(``0)">
+            <summary>
+            Delete given entity
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="entity">Entity object</param>
+            <returns>true: update successfully; false: update fail</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.Delete``1(System.Object[])">
+            <summary>
+            Delete entities by keys
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="keys">Keys</param>
+            <returns>true: update successfully; false: update fail</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetAll``1">
+            <summary>
+            Get all entities
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <returns>Entity array</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetAll``2">
+            <summary>
+            Get all entities
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <typeparam name="TCollection">Entity collection name</typeparam>
+            <returns>Entity array</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntity``1(System.Object[])">
+            <summary>
+            Get single entity by given keys
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="keys">keys</param>
+            <returns>Entity object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntity``1(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Get entity by key value
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="keyMaps">key value pair</param>
+            <returns>Entity</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntityArray``1(System.Object[])">
+            <summary>
+            Get entity array by given keys
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="keys">keys</param>
+            <returns>Entity object array</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntityArray``1(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Get entity array by given key-value pairs
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <param name="keyMaps">key-value pairs</param>
+            <returns>Entity object array</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntityCollection``2(System.Object[])">
+            <summary>
+            Get entity collection by given key-value pairs
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <typeparam name="TCollection">Entity collection name</typeparam>
+            <param name="keys">key-value pairs</param>
+            <returns>Entity collection object</returns>
+        </member>
+        <member name="M:NeatCode.Library.Data.DataAccess.GetEntityCollection``2(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Get entity collection by given key-value pairs
+            </summary>
+            <typeparam name="TEntity">Entity name</typeparam>
+            <typeparam name="TCollection">Entity collection name</typeparam>
+            <param name="keyMaps">key-value pairs</param>
+            <returns>Entity collection object</returns>
+        </member>
+        <member name="P:NeatCode.Library.Data.DataAccess.CommandType">
+            <summary>
+            Command type
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.DataAccess.CommandText">
+            <summary>
+            Command text
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.DataAccess.Parameters">
+            <summary>
+            DbParameter collection
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.DataAccess.Connection">
+            <summary>
+            DbConnection object. Can be used for if there is other database access method exists in the system.
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.DataAccess.Transaction">
+            <summary>
+            DbTransaction object. Can be used for if there is other database access method exists in the system.
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.Data.DataAccess.UseQuestionMarkAsParameter">
+            <summary>
+            Set DbParameter type when using embedded CRUD functions. 
+            If true, use "?" as parameter. If false, use "@ParameterName" as parameter.
+            </summary>
+        </member>
+    </members>
+</doc>

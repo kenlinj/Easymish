@@ -1,0 +1,33 @@
+﻿@model Easymish.WebUI.Models.AccountLogin
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="wrapper">
+    <div id="welcomearea">
+        <p>@Easymish.Web.Resources.Account.Login.LoginTitle</p>
+    </div>
+    <div id="loginarea" class="tablediv">
+        @Html.LabelFor(m => m.Username)
+        @Html.TextBoxFor(m => m.Username, new { maxlength = "100" })
+        <br />
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { maxlength = "50" })
+        <br />
+        <label></label>
+        @Html.CheckBoxFor(m => m.RememberMe)
+        @Html.LabelFor(m => m.RememberMe, new { @class = "regular" })
+        <br />
+        <label></label>
+        @Html.DisplayFor(m => m.ErrorMessage)
+        <br />
+        <label></label>
+        <button onclick="login();" id="btnLogin">@Easymish.Web.Resources.Account.Login.LoginButtonText</button>
+    </div>
+    <div id="actionarea">
+        @Html.ActionLink(Easymish.Web.Resources.Account.Login.ResetPassword, "PasswordReset", "Account", null, new { @class = "link" })
+        <br />
+        @Html.ActionLink(Easymish.Web.Resources.Account.Login.ForgotUsername, "ForgotUserName", "Account", null, new { @class = "link" })
+    </div>
+</div>

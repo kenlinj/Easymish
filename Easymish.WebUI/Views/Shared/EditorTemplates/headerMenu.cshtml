@@ -1,0 +1,11 @@
+﻿@if (Sessions.IsAuthenticate)
+{
+    @Html.ActionLink("Feedback", "feedback", "public", new { id="Feedback" })
+}
+@Html.ActionLink("Language", "help", "public", new { id = "Language" })
+@Html.ActionLink("Help", "help", "public", new { id = "Help" })
+@if (Sessions.IsAuthenticate)
+{
+@Html.ActionLink("Setting", "setting", "public", new { id = "Setting" })
+@Html.ActionLink("Logout", "setting", "public", new { id = "Logout" })
+}

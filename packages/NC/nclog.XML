@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>nclog</name>
+    </assembly>
+    <members>
+        <member name="T:NeatCode.Library.Logging.LoggingUtil">
+            <summary>
+            A buch of logging functions
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.Logging.LoggingUtil.Log(NeatCode.Library.Logging.LogLevel,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            log error message
+            </summary>
+            <param name="logLevel">Log level</param>
+            <param name="title">Logging title</param>
+            <param name="message">Logging message</param>
+            <param name="otherInfo">Other information</param>
+        </member>
+        <member name="M:NeatCode.Library.Logging.LoggingUtil.Log(NeatCode.Library.Logging.LogLevel,System.String)">
+            <summary>
+            log error message
+            </summary>
+            <param name="logLevel">error level</param>
+            <param name="message">error message</param>
+        </member>
+        <member name="M:NeatCode.Library.Logging.LoggingUtil.Log(NeatCode.Library.Logging.LogLevel,System.Exception)">
+            <summary>
+            log error message
+            </summary>
+            <param name="logLevel">error level</param>
+            <param name="ex">exception</param>
+        </member>
+        <member name="M:NeatCode.Library.Logging.LoggingUtil.LogInnerException(NeatCode.Library.Logging.LogLevel,System.Exception)">
+            <summary>
+            log error message
+            </summary>
+            <param name="logLevel">error level</param>
+            <param name="ex">exception</param>
+        </member>
+        <member name="T:NeatCode.Library.Logging.Constants">
+            <summary>
+            Provide constant values for current project
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Logging.Constants.DEFAULT_LOGGING_TITLE">
+            <summary>
+            Default title for logging information
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.Logging.LogLevel">
+            <summary>
+            Logging level
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Logging.LogLevel.Debug">
+            <summary>
+            Debug info
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Logging.LogLevel.Information">
+            <summary>
+            Infomation
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Logging.LogLevel.Error">
+            <summary>
+            Error message
+            </summary>
+        </member>
+        <member name="F:NeatCode.Library.Logging.LogLevel.FatalError">
+            <summary>
+            Fatal error
+            </summary>
+        </member>
+    </members>
+</doc>

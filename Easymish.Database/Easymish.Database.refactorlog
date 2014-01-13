@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="74c2638b-3378-4905-b6bc-0fc6bf0044e6" ChangeDateTime="12/16/2013 18:56:55">
+    <Property Name="ElementName" Value="[dbo].[Person].[Adress]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Person]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Address" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f730ce46-317e-4f0e-bdb0-255ec09d7491" ChangeDateTime="12/16/2013 20:53:32">
+    <Property Name="ElementName" Value="[dbo].[Address].[Country]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Address]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CountryCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1ffd3376-c118-48f2-bad9-c69d0c023d74" ChangeDateTime="12/16/2013 20:53:47">
+    <Property Name="ElementName" Value="[dbo].[Country].[Continent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Country]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ContinentID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d21ae89d-75f9-4adf-86fa-c6ae03de3ec3" ChangeDateTime="12/16/2013 20:54:31">
+    <Property Name="ElementName" Value="[dbo].[Person].[Address]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Person]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AddressID" />
+  </Operation>
+</Operations>

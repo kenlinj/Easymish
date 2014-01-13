@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="" title=""  description="">
+      <siteMapNode url="~/home/scihome" title="Home"  description="" />
+      <siteMapNode url="~/home" title="ResponseDriver"  description="">
+        <siteMapNode url="~/home" title="Dashboard"  description="" />
+        <siteMapNode url="~/leads/new" title="New"  description="" />
+        <siteMapNode url="~/leads/inprogress" title="In Progress"  description="" />
+        <siteMapNode url="~/leads/completed" title="Completed"  description="" />
+        <siteMapNode url="~/leads/add" title="Add Lead"  description="" />
+      </siteMapNode>
+      <siteMapNode url="~/Analytics" title="AnalyticsDriver"  description="" />
+      <siteMapNode url="~/Training" title="Training"  description="" />
+    </siteMapNode>
+</siteMap>

@@ -1,0 +1,22 @@
+﻿#wrapper{
+    width:600px;
+    margin:0 auto;
+}
+
+#welcomearea{
+    font-weight:bold;
+    font-size:18px;
+    margin:50px 0px 30px 180px;    
+}
+
+#actionarea{
+    margin-top:30px;
+}
+#actionarea a {
+    margin: 0px 0px 10px 180px;
+    color: #80B500;
+    display: inline-block;
+    font-family: inherit;
+    font-style: normal;
+    text-decoration: none;
+}

@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>@ViewBag.Title</title>
+        <link href="~/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
+        @Styles.Render("~/bundles/css/style")
+        @RenderSection("head", false)
+        @Html.Partial("PageScript", "css")
+    </head>
+    <body>
+        <div id="header">
+            <div class="leftHeader"><a id="logo" href="@Caches.CompanyUrl"></a></div>
+            <div class="rightHeader">
+                <div class="welcomeArea">@Html.Editor("headerWelcome", "headerWelcome")</div>
+                <div class="headerMenuArea">@Html.Editor("headerMenu", "headerMenu")</div>
+            </div>
+        </div>
+        <div id="menubar"></div>
+        <div id="body">
+            @RenderBody()
+        </div>
+        <div id="footer">
+            <p>&copy; @DateTime.Now.Year - @Caches.CompanyName</p>
+        </div>
+        @Scripts.Render("~/bundles/js/layout")
+        @Scripts.Render("~/bundles/js/script")
+        @RenderSection("scripts", false)
+        @Html.Partial("PageScript", "js")
+    </body>
+</html>

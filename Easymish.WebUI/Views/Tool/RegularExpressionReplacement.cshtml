@@ -1,0 +1,36 @@
+﻿@model Easymish.WebUI.Models.RegularExpressionReplacement
+@{
+    ViewBag.Title = "Regular Expression Replacement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section head
+{
+    <style type="text/css">
+        textarea
+        {
+            width: 800px;
+            height:100px;
+        }
+    </style>
+}
+
+@using (Html.BeginForm())
+{
+    <div>
+        Input Text:<br />
+        @Html.TextAreaFor(m => m.InputText )
+    </div>
+    <div>
+        Regular Expression:<br />
+        @Html.TextAreaFor(m => m.RegularExpression)
+    </div>
+    <div>
+        <input type="submit" value="Get Result" />
+    </div>
+    <div>
+        Result:<br />
+        <textarea>@Model.ResultText</textarea>
+        
+    </div>
+}

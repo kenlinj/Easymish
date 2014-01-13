@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" ?>
+<!--
+This file is used by BundleConfig.cs. Bundle has the follow rules.
+
+1. Each page has its own javascript and style sheet located at "/js/page/[controller]/[action].js" and "/css/page/[controller]/[action].css". 
+Bundle name is "~/bundles/js/[controller]/[action]" and "~/bundles/css/[controller]/[action]"
+
+2. All the other scripts in js folder and style sheet in css folder has its own minified version. 
+The bundle name is "~/bundles/js/[script name]" and "~/bundles/css/[script name]".
+
+3. This file defines the extra bundles. 
+If the bundle name exists in previous steps, the scripts will be include in the same bundle. 
+Otherwise new bundle will be created.
+-->
+<bundles>
+  <bundle name="~/bundles/js/layout">
+    <script>~/js/jquery-{version}.js</script>
+    <script>~/js/jquery-ui-{version}.js</script>
+  </bundle>
+  <bundle name="~/bundles/js/script">
+    <script>~/js/stickyfooter.js</script>
+  </bundle>
+  <bundle name="~/bundles/js/account/login">
+    <script>~/js/page/account/login</script>
+  </bundle>
+</bundles>

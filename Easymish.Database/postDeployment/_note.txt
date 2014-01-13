@@ -1,0 +1,33 @@
+﻿/* How to generate the data?
+
+1. write data into tables
+
+2. use the following script to get the XML data from database
+
+	select * from [tableName] for xml path('item'), root('items')
+
+3. add new file with table name in Initialization folder. Copy the data generated from step 2 into @data.
+
+		SET @data = '
+		<items>
+		  <item>
+			<ID>1</ID>
+			<Name>Africa</Name>
+		  </item>
+		</items>
+		'
+
+		EXEC sp_xml_preparedocument @idoc OUTPUT, @data
+
+		INSERT INTO Continent(ID, Name)
+		SELECT   * 
+		FROM     OPENXML (@idoc, 'items/item',2) 
+					WITH (
+					ID tinyint,
+					Name VARCHAR(50))
+
+4. add script into _PostDeployment.sql. make sure to adjust the order according to the foreign key constrain.
+
+	:r ".\Initialization\Roles.sql"
+
+*/

@@ -1,0 +1,915 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>nc</name>
+    </assembly>
+    <members>
+        <member name="T:NeatCode.Library.MailUtil">
+            <summary>
+            Utility to send email.
+            By default:
+            1. SMTP server information, mail from is retrieved from config file.
+            2. cc, bcc and attach is empty
+            
+            Email tempate is a XML file which must apply to the following schema:
+            <![CDATA[
+            <?xml version="1.0" encoding="utf-8"?>
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+              <xs:element name="email">
+                <xs:complexType>
+                  <xs:sequence>
+                    <!-- mail must have subject and body -->
+                    <xs:element name="subject" minOccurs="1" maxOccurs="1" />
+                    <xs:element name="body" minOccurs="1" maxOccurs="1" />
+                    
+                    <!-- the following elements are optional for mail -->
+                    <xs:element name="isBodyHtml" type="xs:boolean" minOccurs="0" maxOccurs="1" default="false" />
+                    <xs:element name="attachment" minOccurs="0" maxOccurs="unbounded" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:schema>
+            ]]>
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.Send(System.String,System.String)">
+            <summary>
+            This is used to send email without dynamic data.
+            </summary>
+            <param name="to">Email to</param>
+            <param name="template">Email tempate in plain text format</param>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.Send(System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            This is used to send email with dynamic data.
+            The location of dynamic data are defined in placehoders in template.
+            The values are pass in by caller program.
+            </summary>
+            <param name="to">Email to</param>
+            <param name="template">Email tempate in plain text format</param>
+            <param name="placeHolders">Dictionary contains placeholder name and value</param>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.Send(System.Net.Mail.MailAddress,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            This is used to send email with dynamic data.
+            The location of dynamic data are defined in placehoders in template.
+            The values are pass in by caller program.
+            </summary>
+            <param name="to">Email to</param>
+            <param name="template">Email tempate in plain text format</param>
+            <param name="placeHolders">Dictionary contains placeholder name and value</param>
+            <returns>
+            Success: return empty string;
+            Fail: return error message.
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.Send(System.Net.Mail.MailAddress,System.Net.Mail.MailAddressCollection,System.Net.Mail.MailAddressCollection,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            This is used to send email with dynamic data.
+            The location of dynamic data are defined in placehoders in template.
+            The values are pass in by caller program.
+            </summary>
+            <param name="to">Email to</param>
+            <param name="cc">Email cc</param>
+            <param name="bcc">Email bcc</param>
+            <param name="template">Email tempate</param>
+            <param name="placeHolders">Dictionary contains placeholder name and value</param>
+            <returns>
+            Success: return empty string;
+            Fail: return error message.
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.Send(System.Net.Mail.MailMessage)">
+            <summary>
+            Send mail.
+            </summary>
+            <param name="mailMessage">Mail message object</param>
+            <returns>
+            Success: return empty string;
+            Fail: return error message.
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.Send(System.Net.Mail.MailMessage,System.Net.Mail.SmtpClient)">
+            <summary>
+            Send mail.
+            </summary>
+            <param name="mailMessage">Mail message object</param>
+            <param name="smtpClient">SMTP settings</param>
+            <returns>
+            Success: return empty string;
+            Fail: return error message.
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.GetSubjectAndBodyFromEmailTemplate(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Get email subject and body from email template
+            </summary>
+            <param name="template">Email template in plain text format</param>
+            <param name="placeHolders">Dictionary contains placeholder name and value</param>
+            <returns>string array contains subject and body</returns>
+        </member>
+        <member name="M:NeatCode.Library.MailUtil.GetTemplateFromFile(System.String)">
+            <summary>
+            Get template from given file path
+            </summary>
+            <param name="path">File path of template</param>
+            <returns>template content</returns>
+        </member>
+        <member name="T:NeatCode.Library.TableAttribute">
+            <summary>
+            Table attribute
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.NameAttribute">
+            <summary>
+            Name attribute
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.NameAttribute.#ctor(System.String)">
+            <summary>
+            Constructor of name attribute
+            </summary>
+            <param name="name">Attribute name</param>
+        </member>
+        <member name="M:NeatCode.Library.NameAttribute.GetName(System.Reflection.PropertyInfo)">
+            <summary>
+            Static method to get the name of the property
+            </summary>
+            <param name="property">Property</param>
+            <returns>The name of property</returns>
+        </member>
+        <member name="M:NeatCode.Library.NameAttribute.GetName(System.Type)">
+            <summary>
+            Static method to get the name of the type
+            </summary>
+            <param name="type">Type of the object</param>
+            <returns>name of the object</returns>
+        </member>
+        <member name="P:NeatCode.Library.NameAttribute.Name">
+            <summary>
+            Name of the property
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.TableAttribute.#ctor(System.String)">
+            <summary>
+            assign table name
+            </summary>
+            <param name="name">table name in database</param>
+        </member>
+        <member name="T:NeatCode.Library.ConvertUtil">
+            <summary>
+            A set of convertion utilities. It override most of System.Convert methods.
+            </summary>
+            <remarks>
+            If System.Convert fails, exception throws. 
+            In this util, default value is return if convert fails.
+            </remarks>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToBoolean``1(``0)">
+            <summary>
+            convert object to short
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToByte``1(``0)">
+            <summary>
+            convert object to byte
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToChar``1(``0)">
+            <summary>
+            convert object to char
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToDateTime``1(``0)">
+            <summary>
+            convert object to datetime
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToDecimal``1(``0)">
+            <summary>
+            convert object to decimal
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToDouble``1(``0)">
+            <summary>
+            convert object to double
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToInt``1(``0)">
+            <summary>
+            convert object to integer
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToLong``1(``0)">
+            <summary>
+            convert object to long
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToShort``1(``0)">
+            <summary>
+            convert object to short
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToSingle``1(``0)">
+            <summary>
+            convert object to Single
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToString``1(``0)">
+            <summary>
+            convert object to string
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableBoolean``1(``0)">
+            <summary>
+            convert object to boolean
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableByte``1(``0)">
+            <summary>
+            convert object to byte?
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableChar``1(``0)">
+            <summary>
+            convert object to nullable char
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableDateTime``1(``0)">
+            <summary>
+            convert object to datetime
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableDecimal``1(``0)">
+            <summary>
+            convert object to nullable decimal
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableDouble``1(``0)">
+            <summary>
+            convert object to nullable double
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableInt``1(``0)">
+            <summary>
+            convert object to int?
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableLong``1(``0)">
+            <summary>
+            convert object to long?
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableShort``1(``0)">
+            <summary>
+            convert object to short?
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ToNullableSingle``1(``0)">
+            <summary>
+            convert object to Single?
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ChangeType``2(``0)">
+            <summary>
+            Convert the input value from original type to changed type.
+            If convertion fail, return default value
+            </summary>
+            <typeparam name="TOriginal">The original type of the input value.</typeparam>
+            <typeparam name="TConverted">The type after changed</typeparam>
+            <param name="value">input value</param>
+            <returns>value after type changed</returns>
+        </member>
+        <member name="M:NeatCode.Library.ConvertUtil.ChangeType``2(``0,``1)">
+            <summary>
+            Convert the input value from original type to changed type.
+            If convertion fail, return default value
+            </summary>
+            <typeparam name="TOriginal">The original type of the input value.</typeparam>
+            <typeparam name="TConverted">The type after changed</typeparam>
+            <param name="value">input value</param>
+            <param name="defaultValue">default value when convertion fail</param>
+            <returns>value after type changed</returns>
+        </member>
+        <member name="T:NeatCode.Library.ColumnAttribute">
+            <summary>
+            Field name attributes
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.ColumnAttribute.#ctor(System.String)">
+            <summary>
+            column attribute
+            </summary>
+            <param name="columnName">field name in database</param>
+        </member>
+        <member name="M:NeatCode.Library.ColumnAttribute.#ctor(System.String,System.Data.DbType)">
+            <summary>
+            column attribute
+            </summary>
+            <param name="columnName">column name</param>
+            <param name="type">Column type</param>
+        </member>
+        <member name="M:NeatCode.Library.ColumnAttribute.#ctor(System.String,System.Data.DbType,System.Int32)">
+            <summary>
+            column attribute
+            </summary>
+            <param name="columnName">Column name</param>
+            <param name="type">Column type</param>
+            <param name="size">Column size</param>
+        </member>
+        <member name="P:NeatCode.Library.ColumnAttribute.Size">
+            <summary>
+            parameter size
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.ColumnAttribute.Type">
+            <summary>
+            parameter type
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.ColumnAttribute.IsIdentity">
+            <summary>
+            If the column is auto increase column
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.ColumnAttribute.IsKey">
+            <summary>
+            if the column is key. 
+            One table may have mutliple keys which means the key is combination of these columns.
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.ColumnAttribute.Nullable">
+            <summary>
+            If this column nullable
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.EnumValueAttribute">
+            <summary>
+            Enum value attributes
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.EnumValueAttribute.#ctor(System.String)">
+            <summary>
+            Enumeric value attibute
+            </summary>
+            <param name="description">description of enumeric value</param>
+        </member>
+        <member name="P:NeatCode.Library.EnumValueAttribute.Description">
+            <summary>
+            Enum value description.
+            </summary>
+        </member>
+        <member name="P:NeatCode.Library.EnumValueAttribute.Value">
+            <summary>
+            Returns the data value.
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.EnumException`1">
+            <summary>
+            Exception with enum type
+            </summary>
+            <typeparam name="TExceptionEnum">Exception enum Type</typeparam>
+        </member>
+        <member name="M:NeatCode.Library.EnumException`1.#ctor">
+            <summary>
+            Hide default constructor
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.EnumException`1.#ctor(System.Int32)">
+            <summary>
+            Initialize EnumException with given exception number
+            </summary>
+            <param name="exceptionNumber">Exception number</param>
+        </member>
+        <member name="M:NeatCode.Library.EnumException`1.#ctor(`0)">
+            <summary>
+            Initialize EnumException with given exception 
+            </summary>
+            <param name="exception">Exception enum</param>
+        </member>
+        <member name="M:NeatCode.Library.EnumException`1.#ctor(System.Int32,System.Object[])">
+            <summary>
+            Initialize EnumException with given exception number and parameters
+            </summary>
+            <param name="exceptionNumber">Exception number</param>
+            <param name="paras">
+            Parameters used to compose message dynamic.
+            Description of enum must contain placeholder such as {0}, {1}...
+            </param>
+        </member>
+        <member name="M:NeatCode.Library.EnumException`1.#ctor(`0,System.Object[])">
+            <summary>
+            Initialize EnumException with given exception number and parameters
+            </summary>
+            <param name="exception">Exception number</param>
+            <param name="paras">
+            Parameters used to compose message dynamic.
+            Description of enum must contain placeholder such as {0}, {1}...
+            </param>
+        </member>
+        <member name="P:NeatCode.Library.EnumException`1.Message">
+            <summary>
+            Get exception message
+            </summary>
+        </member>
+        <member name="T:NeatCode.Library.EnumUtil">
+            <summary>
+            Utilities for enum type
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.EnumUtil.GetAll(System.Type)">
+            <summary>
+            Get all the value of enum type
+            </summary>
+            <param name="type">type of enum</param>
+            <returns>dictionary with value as key and description as value</returns>
+        </member>
+        <member name="M:NeatCode.Library.EnumUtil.GetEnumByValue``1(System.String)">
+            <summary>
+            Get enum type by value. Return the 1st available enum if nothing is match
+            </summary>
+            <typeparam name="T">Enum Type</typeparam>
+            <param name="value">value</param>
+            <returns>enum</returns>
+        </member>
+        <member name="M:NeatCode.Library.EnumUtil.GetEnumByDescription``1(System.String)">
+            <summary>
+            Get enum type by value. Return the 1st available enum if nothing is match
+            </summary>
+            <typeparam name="T">Enum Type</typeparam>
+            <param name="description">description</param>
+            <returns>enum</returns>
+        </member>
+        <member name="M:NeatCode.Library.EnumUtil.GetDescription``1(``0)">
+            <summary>
+            Returns the description of an enumeration element.
+            The attribute should be EnumValueAttribute. 
+            If there is no EnumValueAttribute, return name
+            </summary>
+            <typeparam name="T">Enum Type</typeparam>
+            <param name="e">enum type</param>
+            <returns>the description of an enumeration element.</returns>
+        </member>
+        <member name="M:NeatCode.Library.EnumUtil.GetDescriptionByValue``1(System.String)">
+            <summary>
+            Get description by value for particular enum type
+            </summary>
+            <typeparam name="T">Enum Type</typeparam>
+            <param name="value">value</param>
+            <returns>description</returns>
+        </member>
+        <member name="M:NeatCode.Library.EnumUtil.GetValue``1(``0)">
+            <summary>
+            Returns the value of an enumeration element.
+            The attribute should be EnumValueAttribute. 
+            If there is no EnumValueAttribute, return enum name
+            </summary>
+            <typeparam name="T">Enum Type</typeparam>
+            <param name="e">enum type</param>
+            <returns>the description of an enumeration element.</returns>
+        </member>
+        <member name="T:NeatCode.Library.EncryptUtil">
+            <summary>
+            Utilities for encrypting data
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.GenerateAsymmetircKeypair(System.Int32)">
+            <summary>
+            Generate public key and private key pair
+            </summary>
+            <param name="keySize">key size in bits</param>
+            <returns>
+            Private key and public key. Both of them are in XML format
+            1st string is private key
+            2nd string is public key
+            </returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptData(System.Byte[])">
+            <summary>
+            decry data by default key and IV
+            </summary>
+            <param name="inputData">input data</param>
+            <returns>decrypted data</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptData(System.String)">
+            <summary>
+            decry data by default key and IV
+            </summary>
+            <param name="inputData">input data</param>
+            <returns>decrypted data</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptData(System.Byte[],System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="privateKey">private key to decrypt (XML format)</param>
+            <returns>clear byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptData(System.String,System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="privateKey">private key to decrypt (XML format)</param>
+            <returns>plain text</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptDataByPublicKey(System.Byte[],System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="publicKey">private key to decrypt (XML format)</param>
+            <returns>clear byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptDataByPublicKey(System.String,System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="publicKey">private key to decrypt (XML format)</param>
+            <returns>plain text</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptData(System.Byte[],System.String,System.String)">
+            <summary>
+            Decrypt input data.
+            </summary>
+            <param name="inputData">data encrypted by EncryptData(byte[] inputData, string receiverPublicKey, string senderPrivateKey)</param>
+            <param name="receiverPrivateKey">receiver's private key</param>
+            <param name="senderPublicKey">sender's public key</param>
+            <returns>decrypted data</returns>
+            <remarks>
+            1. Seperate input data to get encryted data, IV, key and signature
+            2. Get IV and key by receiver's private key
+            3. Get original data decrypted by IV and key
+            4. Verify the original data by sender's public key
+            </remarks>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptData(System.String,System.String,System.String)">
+            <summary>
+            Decrypt input data.
+            </summary>
+            <param name="inputData">data encrypted by EncryptData(string inputData, string receiverPublicKey, string senderPrivateKey)</param>
+            <param name="receiverPrivateKey">receiver's private key</param>
+            <param name="senderPublicKey">sender's public key</param>
+            <returns>decrypted data</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptSmallDataByPrivateKey(System.Byte[],System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="privateKey">private key to decrypt (XML format)</param>
+            <returns>clear byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptSmallDataByPrivateKey(System.String,System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="privateKey">private key to decrypt (XML format)</param>
+            <returns>clear byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptString(System.String,System.String)">
+            <summary>
+            decrypt string value by password
+            </summary>
+            <param name="inputData">input string (base 64 string)</param>
+            <param name="password">password</param>
+            <returns>Encrypted Base64String</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.VerifyData(System.Byte[],System.Byte[],System.String)">
+            <summary>
+            verify who sends the data
+            </summary>
+            <param name="originalData">original byte array</param>
+            <param name="signature">signature</param>
+            <param name="publicKey">public key of the sender</param>
+            <returns>true means the sender owns the public key</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptData(System.Byte[])">
+            <summary>
+            Encry data by default key and IV.
+            </summary>
+            <param name="inputData">input data</param>
+            <returns>encrypted data</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptData(System.String)">
+            <summary>
+            Encry data by default key and IV.
+            </summary>
+            <param name="inputData">input data</param>
+            <returns>encrypted data in Base64String format</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptData(System.Byte[],System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="publicKey">public key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptData(System.String,System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="publicKey">public key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptData(System.Byte[],System.String,System.String)">
+            <summary>
+            Encrypt data by receiver's public key and sender's private key.
+            This method verify both sender and receiver
+            </summary>
+            <param name="inputData">input data</param>
+            <param name="receiverPublicKey">receiver's public key</param>
+            <param name="senderPrivateKey">sender's private key</param>
+            <returns>encrypted data</returns>
+            <remarks>
+            1. Encrypt input data by 3DES algorithm. IV and key are generated radomize.
+            2. Encrypt IV and Key by receiver's public key.
+            3. Sign original input data.
+            4. Convert encrypted data, IV, key and signature into Base64 and merge them.
+            </remarks>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptData(System.String,System.String,System.String)">
+            <summary>
+            Encrypt data by receiver's public key and sender's private key.
+            This method verify both sender and receiver
+            </summary>
+            <param name="inputData">input data. If it is binary, convert it into Base64String</param>
+            <param name="receiverPublicKey">receiver's public key</param>
+            <param name="senderPrivateKey">sender's private key</param>
+            <returns>encrypted data</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptDataByPrivateKey(System.Byte[],System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="privateKey">public key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptDataByPrivateKey(System.String,System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="privateKey">private key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptSmallDataByPublicKey(System.Byte[],System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="publicKey">public key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptSmallDataByPublicKey(System.String,System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="publicKey">public key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryString(System.String,System.String)">
+            <summary>
+            encry string value by password
+            </summary>
+            <param name="inputData">input string</param>
+            <param name="password">password</param>
+            <returns>Encrypted Base64String</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.SignData(System.Byte[],System.String)">
+            <summary>
+            sign byte array
+            </summary>
+            <param name="inputData">byte array to be sign.</param>
+            <param name="privateKey">private key to decrypt (XML format)</param>
+            <returns>signature</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptDataHelper(System.String,System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="privateKey">private key to decrypt (XML format)</param>
+            <returns>plain text</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptDataByPublicKeyHelper(System.String,System.String)">
+            <summary>
+            decrypt byte array with private key
+            </summary>
+            <param name="inputData">encrypted byte array</param>
+            <param name="publicKey">private key to decrypt (XML format)</param>
+            <returns>plain text</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.DecryptDataHelper(System.String,System.String,System.String)">
+            <summary>
+            Decrypt input data.
+            </summary>
+            <param name="inputData">data encrypted by EncryptData(string inputData, string receiverPublicKey, string senderPrivateKey)</param>
+            <param name="receiverPrivateKey">receiver's private key</param>
+            <param name="senderPublicKey">sender's public key</param>
+            <returns>decrypted data</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptDataHelper(System.Byte[],System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="publicKey">public key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptDataByPrivateKeyHelper(System.Byte[],System.String)">
+            <summary>
+            Encrypt byte array with public key.
+            This method verify receiver.
+            </summary>
+            <param name="inputData">clear byte array</param>
+            <param name="privateKey">private key to encrypt with (XML format)</param>
+            <returns>encrypted byte array</returns>
+        </member>
+        <member name="M:NeatCode.Library.EncryptUtil.EncryptDataHelper(System.Byte[],System.String,System.String)">
+            <summary>
+            Encrypt data by receiver's public key and sender's private key.
+            This method verify both sender and receiver
+            </summary>
+            <param name="inputData">input data. If it is binary, convert it into Base64String</param>
+            <param name="receiverPublicKey">receiver's public key</param>
+            <param name="senderPrivateKey">sender's private key</param>
+            <returns>encrypted data</returns>
+        </member>
+        <member name="T:NeatCode.Library.AttributeUtil">
+            <summary>
+            Utilities for Attribute
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.AttributeUtil.GetAttribute``1(System.Reflection.MemberInfo)">
+            <summary>
+            Get the first attribute which type is T and belongs to particular class member
+            </summary>
+            <typeparam name="T">Custom attribute type</typeparam>
+            <param name="member">class member</param>
+            <returns>First available custom attribute</returns>
+        </member>
+        <member name="M:NeatCode.Library.AttributeUtil.GetAttribute``1(System.Type)">
+            <summary>
+            Get the first attribute which type is T and belongs to particular class member
+            </summary>
+            <typeparam name="T">Custom attribute type</typeparam>
+            <param name="type">class member</param>
+            <returns>First available custom attribute</returns>
+        </member>
+        <member name="T:NeatCode.Library.ExtensionMethods">
+            <summary>
+            Provide a set of extension methods
+            </summary>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.ToCollection``2(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Convert IEnumerable type to collection
+            </summary>
+            <typeparam name="TSingle"></typeparam>
+            <typeparam name="TCollection"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.GetExceptionEnumType``1(System.Exception)">
+             <summary>
+             Get exception number 
+             </summary>
+             <typeparam name="TExceptionEnum">Exception enum type</typeparam>
+             <param name="exception">Exception</param>
+            <returns>Exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.GetExceptionNumber(System.Exception)">
+            <summary>
+            Get exception code
+            </summary>
+            <param name="exception">Exception</param>
+            <returns>Exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.Replace(System.Exception,System.String)">
+            <summary>
+            Replace exception as an inner exception and return
+            </summary>
+            <param name="exception">Exception</param>
+            <param name="message">Exception message</param>
+            <returns>new exception with new message and exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.Replace(System.Exception,System.String,System.Int32)">
+            <summary>
+            Replace exception as an inner exception and return
+            </summary>
+            <param name="exception">Exception</param>
+            <param name="exceptionNumber">Exception number</param>
+            <param name="message">Exception message</param>
+            <returns>new exception with new message and exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.Replace``1(System.Exception,System.String,``0)">
+            <summary>
+            Replace exception as an inner exception and return
+            </summary>
+            <typeparam name="TExceptionEnum">Enum defined for the exception</typeparam>
+            <param name="exception">Exception</param>
+            <param name="message">Exception message</param>
+            <param name="value">Exception enum with descirption</param>
+            <returns>new exception with new message and exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.SetExceptionNumber(System.Exception,System.Int32)">
+            <summary>
+            Set exception code to exception
+            </summary>
+            <param name="exception">Exception</param>
+            <param name="exceptionNumber">Error code</param>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.SetExceptionNumber``1(System.Exception,``0)">
+            <summary>
+            Set exception code to exception
+            </summary>
+            <typeparam name="TExceptionEnum">Enum defined for the exception</typeparam>
+            <param name="exception">Exception</param>
+            <param name="value">Error code</param>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.Wrap(System.Exception,System.String)">
+            <summary>
+            Wrap exception as an inner exception and return
+            </summary>
+            <param name="exception">Exception</param>
+            <param name="message">Exception message</param>
+            <returns>new exception with new message and exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.Wrap(System.Exception,System.String,System.Int32)">
+            <summary>
+            Wrap exception as an inner exception and return
+            </summary>
+            <param name="exception">Exception</param>
+            <param name="exceptionNumber">Exception number</param>
+            <param name="message">Exception message</param>
+            <returns>new exception with new message and exception number</returns>
+        </member>
+        <member name="M:NeatCode.Library.ExtensionMethods.Wrap``1(System.Exception,System.String,``0)">
+            <summary>
+            Wrap exception as an inner exception and return
+            </summary>
+            <typeparam name="TExceptionEnum">Enum defined for the exception</typeparam>
+            <param name="exception">Exception</param>
+            <param name="message">Exception message</param>
+            <param name="value">Exception enum with descirption</param>
+            <returns>new exception with new message and exception number</returns>
+        </member>
+    </members>
+</doc>
